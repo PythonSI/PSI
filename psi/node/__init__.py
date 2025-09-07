@@ -1,1 +1,1 @@
-from .data import Data
+from psi.node.data import Data

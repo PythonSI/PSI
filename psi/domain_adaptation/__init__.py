@@ -1,1 +1,1 @@
-from .optimal_transport import OptimalTransportDA
+from psi.domain_adaptation.optimal_transport import OptimalTransportDA
