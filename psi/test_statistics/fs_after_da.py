@@ -22,22 +22,22 @@ class SFS_DATestStatistic:
 
     Parameters
     ----------
-    Xs : array-like, shape (ns, p)
+    xs : array-like, shape (ns, p)
         Source domain design matrix
     ys : array-like, shape (ns, 1)
         Source domain response vector
-    Xt : array-like, shape (nt, p)
+    xt : array-like, shape (nt, p)
         Target domain design matrix
     yt : array-like, shape (nt, 1)
         Target domain response vector
 
     Attributes
     ----------
-    Xs_node : Data
+    xs_node : Data
         Node containing the source domain design matrix
     ys_node : Data
         Node containing the source domain response vector
-    Xt_node : Data
+    xt_node : Data
         Node containing the target domain design matrix
     yt_node : Data
         Node containing the target domain response vector
@@ -50,10 +50,10 @@ class SFS_DATestStatistic:
     after optimal transport domain adaptation.
     """
 
-    def __init__(self, Xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], Xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]):
-        self.Xs_node = Xs
+    def __init__(self, xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]):
+        self.xs_node = xs
         self.ys_node = ys
-        self.Xt_node = Xt
+        self.xt_node = xt
         self.yt_node = yt
 
     def __call__(
@@ -76,9 +76,9 @@ class SFS_DATestStatistic:
         where 
 
         .. math::
-            \eta_j = \begin{bmatrix} \mathbf{0}_{ns} \\ \mathbf{X}_t^A(\mathbf{X}_t^{A^T}\mathbf{X}_t^A)^{-1}\mathbf{e}_j \end{bmatrix},
+            \eta_j = \begin{bmatrix} \mathbf{0}_{ns} \\ \mathbf{x}_t^A(\mathbf{x}_t^{A^T}\mathbf{x}_t^A)^{-1}\mathbf{e}_j \end{bmatrix},
 
-        :math:`n_s` is the number of source domain samples and :math:`\mathbf{X}_t^A` is the target domain active set design matrix.
+        :math:`n_s` is the number of source domain samples and :math:`\mathbf{x}_t^A` is the target domain active set design matrix.
 
         Parameters
         ----------
@@ -104,27 +104,27 @@ class SFS_DATestStatistic:
         deviation : float
             Standard deviation of the test statistic
         """
-        Xs = self.Xs_node()
+        xs = self.xs_node()
         ys = self.ys_node()
-        Xt = self.Xt_node()
+        xt = self.xt_node()
         yt = self.yt_node()
 
-        X = np.vstack((Xs, Xt))
+        x = np.vstack((xs, xt))
         y = np.vstack((ys, yt))
 
         Sigma_s = Sigmas[0]
         Sigma_t = Sigmas[1]
         Sigma = block_diag(Sigma_s, Sigma_t)
 
-        X_active = Xt[:, active_set]
+        x_active = xt[:, active_set]
         ej = np.zeros((len(active_set), 1))
         ej[feature_id, 0] = 1
-        test_statistic_direction = np.vstack((np.zeros((Xs.shape[0], 1)), X_active.dot(
-            np.linalg.inv(X_active.T.dot(X_active))).dot(ej)))
+        test_statistic_direction = np.vstack((np.zeros((xs.shape[0], 1)), x_active.dot(
+            np.linalg.inv(x_active.T.dot(x_active))).dot(ej)))
 
         b = Sigma.dot(test_statistic_direction).dot(np.linalg.inv(
             test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)))
-        a = (np.identity(X_active.shape[0] + Xs.shape[0]
+        a = (np.identity(x_active.shape[0] + xs.shape[0]
                          ) - b.dot(test_statistic_direction.T)).dot(y)
 
         test_statistic = test_statistic_direction.T.dot(y)[0, 0]
@@ -132,8 +132,8 @@ class SFS_DATestStatistic:
             Sigma).dot(test_statistic_direction)[0, 0]
         deviation = np.sqrt(variance)
 
-        self.Xs_node.parametrize(data=Xs)
-        self.ys_node.parametrize(a=a[:Xs.shape[0], :], b=b[:Xs.shape[0], :])
-        self.Xt_node.parametrize(data=Xt)
-        self.yt_node.parametrize(a=a[Xs.shape[0]:, :], b=b[Xs.shape[0]:, :])
+        self.xs_node.parametrize(data=xs)
+        self.ys_node.parametrize(a=a[:xs.shape[0], :], b=b[:xs.shape[0], :])
+        self.xt_node.parametrize(data=xt)
+        self.yt_node.parametrize(a=a[xs.shape[0]:, :], b=b[xs.shape[0]:, :])
         return test_statistic_direction, a, b, test_statistic, variance, deviation

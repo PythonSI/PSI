@@ -1,8 +1,4 @@
-from .pipeline import (
-    Pipeline,
-    AnomalyDetectionPipeline,
-    FeatureSelectionPipeline
-)
+from .pipeline import Pipeline
 from .node import (
     Data,
 )

@@ -20,21 +20,21 @@ class FSTestStatistic:
 
     Parameters
     ----------
-    X : array-like, shape (n, p)
+    x : array-like, shape (n, p)
         Design matrix containing all features
     y : array-like, shape (n, 1)
         Response vector
 
     Attributes
     ----------
-    X_node : Data
+    x_node : Data
         Node containing the design matrix
     y_node : Data
         Node containing the response vector
     """
 
-    def __init__(self, X: npt.NDArray[np.floating], y: npt.NDArray[np.floating]):
-        self.X_node = X
+    def __init__(self, x: npt.NDArray[np.floating], y: npt.NDArray[np.floating]):
+        self.x_node = x
         self.y_node = y
 
     def __call__(
@@ -53,10 +53,10 @@ class FSTestStatistic:
         .. math::
             T = \eta_j^T \mathbf{y}
 
-        where :math:`\eta_j^ = X` is the direction of the test statistic:
+        where :math:`\eta_j^ = x` is the direction of the test statistic:
         
         .. math::
-            \eta_j = X_{A}(X_{A}^T X_{A})^{-1} \bm{e}_j
+            \eta_j = x_{A}(x_{A}^T x_{A})^{-1} \bm{e}_j
 
         Parameters
         ----------
@@ -82,18 +82,18 @@ class FSTestStatistic:
         deviation : float
             Standard deviation of the test statistic
         """
-        X = self.X_node()
+        x = self.x_node()
         y = self.y_node()
 
-        X_active = X[:, active_set]
-        ej = np.zeros((X_active.shape[1], 1))
+        x_active = x[:, active_set]
+        ej = np.zeros((x_active.shape[1], 1))
         ej[feature_id, 0] = 1
-        test_statistic_direction = X_active.dot(
-            np.linalg.inv(X_active.T.dot(X_active))).dot(ej)
+        test_statistic_direction = x_active.dot(
+            np.linalg.inv(x_active.T.dot(x_active))).dot(ej)
 
         b = Sigma.dot(test_statistic_direction).dot(np.linalg.inv(
             test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)))
-        a = (np.identity(X_active.shape[0]) -
+        a = (np.identity(x_active.shape[0]) -
              b.dot(test_statistic_direction.T)).dot(y)
 
         test_statistic = test_statistic_direction.T.dot(y)[0, 0]
@@ -101,6 +101,6 @@ class FSTestStatistic:
             Sigma).dot(test_statistic_direction)[0, 0]
         deviation = np.sqrt(variance)
 
-        self.X_node.parametrize(data=X)
+        self.x_node.parametrize(data=x)
         self.y_node.parametrize(a=a, b=b)
         return test_statistic_direction, a, b, test_statistic, variance, deviation
