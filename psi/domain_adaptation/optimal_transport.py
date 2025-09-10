@@ -107,6 +107,12 @@ class OptimalTransportDA:
         Adapted feature output node
     y_output_node : Data
         Adapted label output node
+    interval : list or None
+        Feasible interval for the last inference call
+    x_output_data : array-like or None
+        Stored adapted features from last inference call
+    y_output_data : tuple or None
+        Stored adapted labels from last inference call
     """
 
     def __init__(self):
@@ -117,6 +123,10 @@ class OptimalTransportDA:
 
         self.x_output_node = Data(self)
         self.y_output_node = Data(self)
+
+        self.interval = None
+        self.x_output_data = None
+        self.y_output_data = None
 
     def run(self, xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]) -> npt.NDArray[np.floating]:
         r"""Configure domain adaptation with input data.
@@ -250,6 +260,13 @@ class OptimalTransportDA:
         final_interval : list
             Feasible interval [lower, upper] for z
         """
+
+        if self.interval is not None and self.interval[0] <= z <= self.interval[1]:
+            self.x_output_node.parametrize(data=self.x_output_data)
+            self.y_output_node.parametrize(
+                a=self.y_output_data[0], b=self.y_output_data[1], data=self.y_output_data[2])
+            return self.interval
+
         xs, _, _, interval_xs = self.x_source_node.inference(z)
         ys, a_ys, b_ys, interval_ys = self.y_source_node.inference(z)
         xt, _, _, interval_xt = self.x_target_node.inference(z)
@@ -299,7 +316,16 @@ class OptimalTransportDA:
         final_interval = intersect(final_interval, interval_xt)
         final_interval = intersect(final_interval, interval_yt)
 
-        self.x_output_node.parametrize(data=Omega.dot(x))
-        self.y_output_node.parametrize(a=Omega.dot(
-            a), b=Omega.dot(b), data=Omega.dot(y))
-        return final_interval
+        x_tilde = Omega.dot(x)
+        y_tilde = Omega.dot(y)
+        a_tilde = Omega.dot(a)
+        b_tilde = Omega.dot(b)
+
+        self.x_output_node.parametrize(data=x_tilde)
+        self.y_output_node.parametrize(a=a_tilde, b=b_tilde, data=y_tilde)
+
+        self.interval = final_interval
+        self.x_output_data = x_tilde
+        self.y_output_data = (a_tilde, b_tilde, y_tilde)
+
+        return self.interval

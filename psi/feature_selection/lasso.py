@@ -33,6 +33,10 @@ class LassoFeatureSelection:
         Regularization parameter
     active_set_node : Data
         Output node containing selected feature indices
+    self.interval : list or None
+        Feasible interval from last inference call
+    self.active_set_data : array-like or None
+        Active set from last inference call
     """
 
     def __init__(self, lambda_: float = 10):
@@ -43,6 +47,9 @@ class LassoFeatureSelection:
 
         # Output for Lasso regression
         self.active_set_node = Data(self)
+        
+        self.interval = None
+        self.active_set_data = None
 
     def __call__(self) -> npt.NDArray[np.floating]:
         r"""Execute LASSO feature selection on stored data.
@@ -133,6 +140,10 @@ class LassoFeatureSelection:
         final_interval : list
             Feasible interval [lower, upper] for z
         """
+        if self.interval is not None and self.interval[0] <= z <= self.interval[1]:
+            self.active_set_node.parametrize(data=self.active_set_data)
+            return self.interval
+        
         x, _, _, interval_x = self.x_node.inference(z)
         y, a, b, interval_y = self.y_node.inference(z)
 
@@ -178,6 +189,9 @@ class LassoFeatureSelection:
             final_interval, solve_linear_inequalities(A, B))
 
         self.active_set_node.parametrize(data=active_set)
+        
+        self.interval = final_interval
+        self.active_set_data = active_set
 
         return final_interval
 

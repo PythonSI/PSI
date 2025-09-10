@@ -29,8 +29,8 @@ def line_search(
         z = interval_of_z[1] + step_size
 
     for i in range(len(list_intervals)-1):
-        assert (list_intervals[i][1] <= list_intervals[i+1]
-                [0], "Intervals are overlapping in line search")
+        assert (list_intervals[i][1] >= list_intervals[i+1][0], 
+                "Intervals are overlapping in line search")
 
     return list_intervals, list_outputs
 
