@@ -35,7 +35,7 @@ my_pipeline = SFS_DA()
 
 # %%
 # Generate data
-# -------------
+# -------------- 
 
 def gen_data(n, p, true_beta):
     x = np.random.normal(loc = 0, scale = 1, size = (n, p))
@@ -51,9 +51,17 @@ xt, yt, sigma_t = gen_data(25, 5, np.asarray([0, 0, 0, 0, 0]))
 
 # %%
 # Run the pipeline
-# ---------------
+# -----------------
 
 selected_features, p_values = my_pipeline(inputs=[xs, ys, xt, yt], covariances=[sigma_s, sigma_t])
 
 print("Selected features: ", selected_features)
 print("P-values: ", p_values)
+
+# %%
+# Plot the p-values
+plt.figure()
+plt.bar(range(len(p_values)), p_values)
+plt.xlabel("Feature index")
+plt.ylabel("P-value")
+plt.show()

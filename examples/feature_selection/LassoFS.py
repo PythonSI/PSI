@@ -10,12 +10,13 @@ from si.feature_selection import LassoFeatureSelection
 from si import Data
 from si.test_statistics import FSTestStatistic
 import numpy as np
+import matplotlib.pyplot as plt
 
 # %%
 # Define the pipeline
 # -------------------
 
-def pipeline() -> Pipeline:
+def LassoFS() -> Pipeline:
     x = Data()
     y = Data()
     
@@ -23,11 +24,11 @@ def pipeline() -> Pipeline:
     active_set = lasso.run(x, y)
     return Pipeline(inputs=(x, y), output=active_set, test_statistic=FSTestStatistic(x=x, y=y))
 
-my_pipeline = pipeline()
+my_pipeline = LassoFS()
 
 # %%
 # Generate data
-# -------------
+# --------------
 
 def gen_data(n, p, true_beta):
     x = np.random.normal(loc = 0, scale = 1, size = (n, p))
@@ -42,9 +43,16 @@ x, y, sigma = gen_data(150, 5, np.asarray([0, 0, 0, 0, 0]))
 
 # %%
 # Run the pipeline
-# ---------------
+# -----------------
 
 selected_features, p_values = my_pipeline([x, y], sigma)
-
 print("Selected features: ", selected_features)
 print("P-values: ", p_values)
+
+# %%
+# Plot the p-values
+plt.figure()
+plt.bar(range(len(p_values)), p_values)
+plt.xlabel("Feature index")
+plt.ylabel("P-value")
+plt.show()
