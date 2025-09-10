@@ -3,3 +3,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# sphinx-gallery temp files
+docs/source/auto_examples/*.pickle
+docs/source/auto_examples/*.md5
+docs/source/auto_examples/
+docs/source/gen_modules/
+docs/_build/
