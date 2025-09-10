@@ -1,4 +1,4 @@
-Contributing to POT
+Contributing to PSI
 ===================
 
 .. include:: ../../.github/CONTRIBUTING.md
