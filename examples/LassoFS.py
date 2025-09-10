@@ -5,10 +5,10 @@ Selective inference for Lasso Feature Selection
 
 # Author: Tran Tuan Kiet
 
-from psi import Pipeline
-from psi.feature_selection import LassoFeatureSelection
-from psi import Data
-from psi.test_statistics import FSTestStatistic
+from si import Pipeline
+from si.feature_selection import LassoFeatureSelection
+from si import Data
+from si.test_statistics import FSTestStatistic
 import numpy as np
 
 # %%

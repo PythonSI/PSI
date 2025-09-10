@@ -1,4 +1,4 @@
-from psi.util.util import (
+from si.util.util import (
     FormatArray,
     solve_linear_inequalities,
     solve_quadratic_inequality,

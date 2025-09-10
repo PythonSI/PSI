@@ -1,7 +1,7 @@
-from psi.node import Data
+from si.node import Data
 import numpy as np
 import numpy.typing as npt
-from psi.util import compute_p_value
+from si.util import compute_p_value
 from typing import List
 
 
