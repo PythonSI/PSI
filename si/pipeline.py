@@ -5,20 +5,14 @@ from si.util import compute_p_value
 from typing import List
 
 
-def line_search(
-    output_node: Data,
-    z_min: float,
-    z_max: float,
-    step_size: float = 1e-4
-):
+def line_search(output_node: Data, z_min: float, z_max: float, step_size: float = 1e-4):
     list_intervals = []
     list_outputs = []
     z = z_min
     while z < z_max:
         output, _, _, interval_of_z = output_node.inference(z=z)
 
-        interval_of_z = [max(interval_of_z[0], z_min),
-                         min(interval_of_z[1], z_max)]
+        interval_of_z = [max(interval_of_z[0], z_min), min(interval_of_z[1], z_max)]
 
         list_intervals.append(interval_of_z)
         list_outputs.append(output)
@@ -28,14 +22,15 @@ def line_search(
 
         z = interval_of_z[1] + step_size
 
-    for i in range(len(list_intervals)-1):
-        assert (list_intervals[i][1] >= list_intervals[i+1][0], 
-                "Intervals are overlapping in line search")
+    for i in range(len(list_intervals) - 1):
+        assert list_intervals[i][1] >= list_intervals[i + 1][0], (
+            "Intervals are overlapping in line search"
+        )
 
     return list_intervals, list_outputs
 
 
-class Pipeline():
+class Pipeline:
     r"""Selective inference for Feature selection pipeline.
 
     Parameters
@@ -66,7 +61,7 @@ class Pipeline():
         self,
         inputs: List[npt.NDArray[np.floating]],
         covariances: List[npt.NDArray[np.floating]],
-        verbose: bool = False
+        verbose: bool = False,
     ) -> npt.NDArray[np.floating]:
         r"""Execute the pipeline and inference on the observed output.
 
@@ -97,7 +92,8 @@ class Pipeline():
             if verbose:
                 print(f"Testing feature {output_id}")
             p_value = self.inference(
-                output_id=output_id, output=output, covariances=covariances)
+                output_id=output_id, output=output, covariances=covariances
+            )
 
             if verbose:
                 print(f"Feature {output_id}: p-value = {p_value}")
@@ -110,7 +106,7 @@ class Pipeline():
         covariances: List[npt.NDArray[np.floating]],
         output: npt.NDArray[np.floating],
     ) -> float:
-        r"""Perform selective inference for a single specific data based on 
+        r"""Perform selective inference for a single specific data based on
         the chosen hypothesis and test statistic.
 
         For example, testing if a specific selected feature has a non-zero coefficient
@@ -130,15 +126,21 @@ class Pipeline():
             Selective p-value for the data
         """
 
-        test_statistic_direction, a, b, test_statistic, variance, deviation = self.test_statistic(
-            output, output_id, covariances)
+        test_statistic_direction, a, b, test_statistic, variance, deviation = (
+            self.test_statistic(output, output_id, covariances)
+        )
 
         # # For debug:
         # print(f"Test statistic: {test_statistic}")
 
-        list_intervals, list_outputs = line_search(self.output_node, z_min=min(
-            -20 * deviation, test_statistic), z_max=max(20 * deviation, test_statistic), step_size=1e-4)
+        list_intervals, list_outputs = line_search(
+            self.output_node,
+            z_min=min(-20 * deviation, test_statistic),
+            z_max=max(20 * deviation, test_statistic),
+            step_size=1e-4,
+        )
         p_value = compute_p_value(
-            test_statistic, variance, list_intervals, list_outputs, output)
+            test_statistic, variance, list_intervals, list_outputs, output
+        )
 
         return p_value

@@ -16,13 +16,17 @@ import matplotlib.pyplot as plt
 # Define the pipeline
 # -------------------
 
+
 def LassoFS() -> Pipeline:
     x = Data()
     y = Data()
-    
+
     lasso = LassoFeatureSelection(lambda_=10)
     active_set = lasso.run(x, y)
-    return Pipeline(inputs=(x, y), output=active_set, test_statistic=FSTestStatistic(x=x, y=y))
+    return Pipeline(
+        inputs=(x, y), output=active_set, test_statistic=FSTestStatistic(x=x, y=y)
+    )
+
 
 my_pipeline = LassoFS()
 
@@ -30,14 +34,16 @@ my_pipeline = LassoFS()
 # Generate data
 # --------------
 
+
 def gen_data(n, p, true_beta):
-    x = np.random.normal(loc = 0, scale = 1, size = (n, p))
+    x = np.random.normal(loc=0, scale=1, size=(n, p))
     true_beta = true_beta.reshape(-1, 1)
-    
+
     mu = x.dot(true_beta)
     Sigma = np.identity(n)
-    Y = mu + np.random.normal(loc = 0, scale = 1, size = (n, 1))
+    Y = mu + np.random.normal(loc=0, scale=1, size=(n, 1))
     return x, Y, Sigma
+
 
 x, y, sigma = gen_data(150, 5, np.asarray([0, 0, 0, 0, 0]))
 

@@ -8,13 +8,11 @@
 
 import sys
 import os
-import re
-import datetime
 
-project = 'PSI Python Selective Inference'
-copyright = '2025, PSI Contributors'
-author = 'Tran Tuan Kiet, PSI Contributors'
-release = 'First pre-release'
+project = "PSI Python Selective Inference"
+copyright = "2025, PSI Contributors"
+author = "Tran Tuan Kiet, PSI Contributors"
+release = "First pre-release"
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath(".."))
@@ -43,7 +41,7 @@ extensions = [
 sphinx_gallery_conf = {
     "examples_dirs": ["../../examples"],
     "gallery_dirs": "auto_examples",
-    "filename_pattern": r'\.py',  # (?!barycenter_fgw)
+    "filename_pattern": r"\.py",  # (?!barycenter_fgw)
     "nested_sections": False,
     "backreferences_dir": "gen_modules/backreferences",
     "inspect_global_variables": True,
@@ -57,12 +55,12 @@ napoleon_numpy_docstring = True
 autosummary_generate = True
 autosummary_imported_members = True
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]

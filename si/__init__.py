@@ -5,3 +5,11 @@ from si import test_statistics
 from si.node import (
     Data,
 )
+
+__all__ = [
+    "Pipeline",
+    "feature_selection",
+    "domain_adaptation",
+    "test_statistics",
+    "Data",
+]

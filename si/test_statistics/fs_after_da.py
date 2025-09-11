@@ -8,7 +8,7 @@ class SFS_DATestStatistic:
     r"""Test statistic for feature selection inference after domain adaptation.
 
     This class computes test statistics for testing individual features
-    after feature selection on domain-adapted data, implementing the 
+    after feature selection on domain-adapted data, implementing the
     post-selection inference framework for cross-domain feature validation.
 
     The test statistic is designed for testing:
@@ -50,7 +50,13 @@ class SFS_DATestStatistic:
     after optimal transport domain adaptation.
     """
 
-    def __init__(self, xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]):
+    def __init__(
+        self,
+        xs: npt.NDArray[np.floating],
+        ys: npt.NDArray[np.floating],
+        xt: npt.NDArray[np.floating],
+        yt: npt.NDArray[np.floating],
+    ):
         self.xs_node = xs
         self.ys_node = ys
         self.xt_node = xt
@@ -60,7 +66,7 @@ class SFS_DATestStatistic:
         self,
         active_set: npt.NDArray[np.floating],
         feature_id: int,
-        Sigmas: List[npt.NDArray[np.floating]]
+        Sigmas: List[npt.NDArray[np.floating]],
     ) -> Tuple[list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float]:
         r"""Compute test statistic for a selected feature after domain adaptation.
 
@@ -73,7 +79,7 @@ class SFS_DATestStatistic:
         .. math::
             T = \eta_j^T \begin{bmatrix} \mathbf{y}_s \\ \mathbf{y}_t \end{bmatrix}
 
-        where 
+        where
 
         .. math::
             \eta_j = \begin{bmatrix} \mathbf{0}_{ns} \\ \mathbf{x}_t^A(\mathbf{x}_t^{A^T}\mathbf{x}_t^A)^{-1}\mathbf{e}_j \end{bmatrix},
@@ -109,7 +115,6 @@ class SFS_DATestStatistic:
         xt = self.xt_node()
         yt = self.yt_node()
 
-        x = np.vstack((xs, xt))
         y = np.vstack((ys, yt))
 
         Sigma_s = Sigmas[0]
@@ -119,21 +124,31 @@ class SFS_DATestStatistic:
         x_active = xt[:, active_set]
         ej = np.zeros((len(active_set), 1))
         ej[feature_id, 0] = 1
-        test_statistic_direction = np.vstack((np.zeros((xs.shape[0], 1)), x_active.dot(
-            np.linalg.inv(x_active.T.dot(x_active))).dot(ej)))
+        test_statistic_direction = np.vstack(
+            (
+                np.zeros((xs.shape[0], 1)),
+                x_active.dot(np.linalg.inv(x_active.T.dot(x_active))).dot(ej),
+            )
+        )
 
-        b = Sigma.dot(test_statistic_direction).dot(np.linalg.inv(
-            test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)))
-        a = (np.identity(x_active.shape[0] + xs.shape[0]
-                         ) - b.dot(test_statistic_direction.T)).dot(y)
+        b = Sigma.dot(test_statistic_direction).dot(
+            np.linalg.inv(
+                test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)
+            )
+        )
+        a = (
+            np.identity(x_active.shape[0] + xs.shape[0])
+            - b.dot(test_statistic_direction.T)
+        ).dot(y)
 
         test_statistic = test_statistic_direction.T.dot(y)[0, 0]
-        variance = test_statistic_direction.T.dot(
-            Sigma).dot(test_statistic_direction)[0, 0]
+        variance = test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)[
+            0, 0
+        ]
         deviation = np.sqrt(variance)
 
         self.xs_node.parametrize(data=xs)
-        self.ys_node.parametrize(a=a[:xs.shape[0], :], b=b[:xs.shape[0], :])
+        self.ys_node.parametrize(a=a[: xs.shape[0], :], b=b[: xs.shape[0], :])
         self.xt_node.parametrize(data=xt)
-        self.yt_node.parametrize(a=a[xs.shape[0]:, :], b=b[xs.shape[0]:, :])
+        self.yt_node.parametrize(a=a[xs.shape[0] :, :], b=b[xs.shape[0] :, :])
         return test_statistic_direction, a, b, test_statistic, variance, deviation

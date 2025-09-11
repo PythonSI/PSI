@@ -13,7 +13,7 @@ class LassoFeatureSelection:
     selected features. The LASSO optimization problem is:
 
     .. math::
-        \hat{\boldsymbol{\beta}} = \mathop{\arg \min}_{\boldsymbol{\beta}} \quad 
+        \hat{\boldsymbol{\beta}} = \mathop{\arg \min}_{\boldsymbol{\beta}} \quad
         \frac{1}{2} \|\mathbf{y} - \mathbf{x}\boldsymbol{\beta}\|_2^2 + \lambda \|\boldsymbol{\beta}\|_1
 
     where :math:`\lambda` is the regularization parameter that controls sparsity.
@@ -27,7 +27,7 @@ class LassoFeatureSelection:
     ----------
     x_node : Data or None
         Input feature matrix node
-    y_node : Data or None  
+    y_node : Data or None
         Input response vector node
     lambda_ : float
         Regularization parameter
@@ -47,7 +47,7 @@ class LassoFeatureSelection:
 
         # Output for Lasso regression
         self.active_set_node = Data(self)
-        
+
         self.interval = None
         self.active_set_data = None
 
@@ -67,7 +67,9 @@ class LassoFeatureSelection:
         self.active_set_node.update(active_set)
         return active_set
 
-    def run(self, x: npt.NDArray[np.floating], y: npt.NDArray[np.floating]) -> npt.NDArray[np.floating]:
+    def run(
+        self, x: npt.NDArray[np.floating], y: npt.NDArray[np.floating]
+    ) -> npt.NDArray[np.floating]:
         r"""Configure LASSO with input data and return active set node.
 
         Parameters
@@ -87,10 +89,10 @@ class LassoFeatureSelection:
         return self.active_set_node
 
     def forward(
-        self,
-        x: npt.NDArray[np.floating],
-        y: npt.NDArray[np.floating]
-    ) -> Tuple[npt.NDArray[np.floating], npt.NDArray[np.floating], npt.NDArray[np.floating]]:
+        self, x: npt.NDArray[np.floating], y: npt.NDArray[np.floating]
+    ) -> Tuple[
+        npt.NDArray[np.floating], npt.NDArray[np.floating], npt.NDArray[np.floating]
+    ]:
         r"""Solve LASSO optimization and extract active set information.
 
         Solves the LASSO problem and returns the active set (selected features),
@@ -108,14 +110,18 @@ class LassoFeatureSelection:
         active_set : array-like, shape (k,)
             Indices of selected features
         inactive_set : array-like, shape (p-k,)
-            Indices of unselected features  
+            Indices of unselected features
         sign_active : array-like, shape (k, 1)
             Signs of coefficients for active features
         """
         num_of_dimension = x.shape[1]
 
-        lasso = Lasso(alpha=self.lambda_ /
-                      x.shape[0], fit_intercept=False, tol=1e-10, max_iter=100000000)
+        lasso = Lasso(
+            alpha=self.lambda_ / x.shape[0],
+            fit_intercept=False,
+            tol=1e-10,
+            max_iter=100000000,
+        )
         lasso.fit(x, y)
 
         coefficients = lasso.coef_.reshape(num_of_dimension, 1)
@@ -130,7 +136,7 @@ class LassoFeatureSelection:
 
     def inference(self, z: float) -> Tuple[list, npt.NDArray[np.floating]]:
         r"""Find feasible interval of the Lasso Feature Selection for the parametrized data at z.
-        
+
         ----------
         z : float
             Inference parameter value
@@ -143,7 +149,7 @@ class LassoFeatureSelection:
         if self.interval is not None and self.interval[0] <= z <= self.interval[1]:
             self.active_set_node.parametrize(data=self.active_set_data)
             return self.interval
-        
+
         x, _, _, interval_x = self.x_node.inference(z)
         y, a, b, interval_y = self.y_node.inference(z)
 
@@ -162,19 +168,25 @@ class LassoFeatureSelection:
         temp = x_i.T.dot(x_aT_plus).dot(sign_active)
 
         # A + Bz <= 0 (elemen-wise)
-        A0 = (self.lambda_ * sign_active * np.linalg.inv(x_a.T.dot(x_a)).dot(sign_active)
-              - sign_active * x_a_plus.dot(a))
+        A0 = self.lambda_ * sign_active * np.linalg.inv(x_a.T.dot(x_a)).dot(
+            sign_active
+        ) - sign_active * x_a_plus.dot(a)
         B0 = -1 * sign_active * x_a_plus.dot(b)
 
-        temperal_variable = x_i.T.dot(
-            np.identity(x.shape[0]) - x_a.dot(x_a_plus))
+        temperal_variable = x_i.T.dot(np.identity(x.shape[0]) - x_a.dot(x_a_plus))
 
-        A10 = -(np.ones((temp.shape[0], 1)) - temp
-                - (temperal_variable.dot(a)) / self.lambda_)
+        A10 = -(
+            np.ones((temp.shape[0], 1))
+            - temp
+            - (temperal_variable.dot(a)) / self.lambda_
+        )
         B10 = (temperal_variable.dot(b)) / self.lambda_
 
-        A11 = -(np.ones((temp.shape[0], 1)) + temp
-                + (temperal_variable.dot(a)) / self.lambda_)
+        A11 = -(
+            np.ones((temp.shape[0], 1))
+            + temp
+            + (temperal_variable.dot(a)) / self.lambda_
+        )
         B11 = -(temperal_variable.dot(b)) / self.lambda_
 
         solve_linear_inequalities(A0, B0)
@@ -185,11 +197,10 @@ class LassoFeatureSelection:
         B = np.vstack((B0, B10, B11))
 
         final_interval = intersect(interval_x, interval_y)
-        final_interval = intersect(
-            final_interval, solve_linear_inequalities(A, B))
+        final_interval = intersect(final_interval, solve_linear_inequalities(A, B))
 
         self.active_set_node.parametrize(data=active_set)
-        
+
         self.interval = final_interval
         self.active_set_data = active_set
 
@@ -239,32 +250,38 @@ class LassoFeatureSelection:
 
         for j in range(beta_hat.shape[0]):
             if abs(beta_hat[j]) > tol:  # Active set
-                cond = np.isclose(grad[j, 0], Lambda *
-                                  np.sign(beta_hat[j, 0]), atol=tol)
+                cond = np.isclose(
+                    grad[j, 0], Lambda * np.sign(beta_hat[j, 0]), atol=tol
+                )
                 if cond:
                     print(
-                        f"[Active]   j={j:2d}, β={beta_hat[j,0]:.4f}, grad={grad[j,0]:.4f} ✅ OK")
+                        f"[Active]   j={j:2d}, β={beta_hat[j, 0]:.4f}, grad={grad[j, 0]:.4f} ✅ OK"
+                    )
                     n_active_ok += 1
                 else:
                     print(
-                        f"[Active]   j={j:2d}, β={beta_hat[j,0]:.4f}, grad={grad[j,0]:.4f} ❌ VIOLATION")
+                        f"[Active]   j={j:2d}, β={beta_hat[j, 0]:.4f}, grad={grad[j, 0]:.4f} ❌ VIOLATION"
+                    )
                     n_viol += 1
                     assert cond, f"KKT violation at active index {j}"
             else:  # Inactive set
-                cond = (-Lambda - tol <= grad[j, 0] <= Lambda + tol)
+                cond = -Lambda - tol <= grad[j, 0] <= Lambda + tol
                 if cond:
                     print(
-                        f"[Inactive] j={j:2d}, β={beta_hat[j,0]:.4f}, grad={grad[j,0]:.4f} ✅ OK")
+                        f"[Inactive] j={j:2d}, β={beta_hat[j, 0]:.4f}, grad={grad[j, 0]:.4f} ✅ OK"
+                    )
                     n_inactive_ok += 1
                 else:
                     print(
-                        f"[Inactive] j={j:2d}, β={beta_hat[j,0]:.4f}, grad={grad[j,0]:.4f} ❌ VIOLATION")
+                        f"[Inactive] j={j:2d}, β={beta_hat[j, 0]:.4f}, grad={grad[j, 0]:.4f} ❌ VIOLATION"
+                    )
                     n_viol += 1
                     assert cond, f"KKT violation at inactive index {j}"
 
         print("---------------------------------------------------------")
         print(
-            f"Summary: {n_active_ok} active OK, {n_inactive_ok} inactive OK, {n_viol} violations")
+            f"Summary: {n_active_ok} active OK, {n_inactive_ok} inactive OK, {n_viol} violations"
+        )
         print("---------------------------------------------------------")
 
         assert n_viol == 0, f"{n_viol} KKT conditions violated!"

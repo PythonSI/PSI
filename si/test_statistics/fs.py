@@ -41,7 +41,7 @@ class FSTestStatistic:
         self,
         active_set: npt.NDArray[np.floating],
         feature_id: int,
-        Sigma: npt.NDArray[np.floating]
+        Sigma: npt.NDArray[np.floating],
     ) -> Tuple[list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float]:
         r"""Compute test statistic for a selected feature.
 
@@ -54,7 +54,7 @@ class FSTestStatistic:
             T = \eta_j^T \mathbf{y}
 
         where :math:`\eta_j^ = x` is the direction of the test statistic:
-        
+
         .. math::
             \eta_j = x_{A}(x_{A}^T x_{A})^{-1} \bm{e}_j
 
@@ -89,16 +89,20 @@ class FSTestStatistic:
         ej = np.zeros((x_active.shape[1], 1))
         ej[feature_id, 0] = 1
         test_statistic_direction = x_active.dot(
-            np.linalg.inv(x_active.T.dot(x_active))).dot(ej)
+            np.linalg.inv(x_active.T.dot(x_active))
+        ).dot(ej)
 
-        b = Sigma.dot(test_statistic_direction).dot(np.linalg.inv(
-            test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)))
-        a = (np.identity(x_active.shape[0]) -
-             b.dot(test_statistic_direction.T)).dot(y)
+        b = Sigma.dot(test_statistic_direction).dot(
+            np.linalg.inv(
+                test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)
+            )
+        )
+        a = (np.identity(x_active.shape[0]) - b.dot(test_statistic_direction.T)).dot(y)
 
         test_statistic = test_statistic_direction.T.dot(y)[0, 0]
-        variance = test_statistic_direction.T.dot(
-            Sigma).dot(test_statistic_direction)[0, 0]
+        variance = test_statistic_direction.T.dot(Sigma).dot(test_statistic_direction)[
+            0, 0
+        ]
         deviation = np.sqrt(variance)
 
         self.x_node.parametrize(data=x)

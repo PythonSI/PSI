@@ -2,13 +2,18 @@ import numpy as np
 import numpy.typing as npt
 from si.node import Data
 from typing import Tuple
-from si.util import solve_linear_inequalities, solve_quadratic_inequality, intersect
+from si.util import solve_quadratic_inequality, intersect
 from scipy.cluster.hierarchy import DisjointSet
 import ot
 
 
 def construct_Theta(ns, nt):
-    return np.hstack((np.kron(np.identity(ns), np.ones((nt, 1))), np.kron(- np.ones((ns, 1)), np.identity(nt))))
+    return np.hstack(
+        (
+            np.kron(np.identity(ns), np.ones((nt, 1))),
+            np.kron(-np.ones((ns, 1)), np.identity(nt)),
+        )
+    )
 
 
 def construct_cost(xs, ys, xt, yt):
@@ -31,7 +36,7 @@ def construct_H(ns, nt):
     Hr = np.zeros((ns, ns * nt))
 
     for i in range(ns):
-        Hr[i:i+1, i*nt:(i+1)*nt] = np.ones((1, nt))
+        Hr[i : i + 1, i * nt : (i + 1) * nt] = np.ones((1, nt))
 
     Hc = np.identity(nt)
     for _ in range(ns - 1):
@@ -61,7 +66,7 @@ def construct_B(T, u, v, c):
 
     # Early exit if we already have enough elements
     if len(B) >= ns + nt - 1:
-        return sorted(B[:ns + nt - 1])
+        return sorted(B[: ns + nt - 1])
 
     # Vectorized computation of reduced costs
     rc = c - u[:, np.newaxis] - v[np.newaxis, :]
@@ -98,7 +103,7 @@ class OptimalTransportDA:
     x_source_node : Data or None
         Source domain feature node
     y_source_node : Data or None
-        Source domain label node  
+        Source domain label node
     x_target_node : Data or None
         Target domain feature node
     y_target_node : Data or None
@@ -128,7 +133,13 @@ class OptimalTransportDA:
         self.x_output_data = None
         self.y_output_data = None
 
-    def run(self, xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]) -> npt.NDArray[np.floating]:
+    def run(
+        self,
+        xs: npt.NDArray[np.floating],
+        ys: npt.NDArray[np.floating],
+        xt: npt.NDArray[np.floating],
+        yt: npt.NDArray[np.floating],
+    ) -> npt.NDArray[np.floating]:
         r"""Configure domain adaptation with input data.
 
         Parameters
@@ -161,14 +172,20 @@ class OptimalTransportDA:
         self.y_target_node = yt
         return self.x_output_node, self.y_output_node
 
-    def forward(self, xs: npt.NDArray[np.floating], ys: npt.NDArray[np.floating], xt: npt.NDArray[np.floating], yt: npt.NDArray[np.floating]):
+    def forward(
+        self,
+        xs: npt.NDArray[np.floating],
+        ys: npt.NDArray[np.floating],
+        xt: npt.NDArray[np.floating],
+        yt: npt.NDArray[np.floating],
+    ):
         r"""Solve optimal transport and construct adapted dataset.
 
         Parameters
         ----------
         xs : array-like, shape (ns, d)
             Source domain features
-        ys : array-like, shape (ns, 1)  
+        ys : array-like, shape (ns, 1)
             Source domain labels
         xt : array-like, shape (nt, d)
             Target domain features
@@ -213,10 +230,11 @@ class OptimalTransportDA:
         B = np.where(T.reshape(-1) != 0)[0].tolist()
 
         if len(B) != ns + nt - 1:
-            B = construct_B(T, log['u'], log['v'], c.reshape(ns, nt))
+            B = construct_B(T, log["u"], log["v"], c.reshape(ns, nt))
         T = T.reshape(ns, nt)
         Omega = np.hstack(
-            (np.zeros((ns + nt, ns)), np.vstack((ns * T, np.identity(nt)))))
+            (np.zeros((ns + nt, ns)), np.vstack((ns * T, np.identity(nt))))
+        )
         x_tilde = Omega.dot(x)
         y_tilde = Omega.dot(y)
         return x_tilde, y_tilde, B, _c, Omega
@@ -253,7 +271,7 @@ class OptimalTransportDA:
         Parameters
         ----------
         z : float
-            Scalar parameter 
+            Scalar parameter
 
         Returns
         -------
@@ -264,7 +282,10 @@ class OptimalTransportDA:
         if self.interval is not None and self.interval[0] <= z <= self.interval[1]:
             self.x_output_node.parametrize(data=self.x_output_data)
             self.y_output_node.parametrize(
-                a=self.y_output_data[0], b=self.y_output_data[1], data=self.y_output_data[2])
+                a=self.y_output_data[0],
+                b=self.y_output_data[1],
+                data=self.y_output_data[2],
+            )
             return self.interval
 
         xs, _, _, interval_xs = self.x_source_node.inference(z)
@@ -283,7 +304,7 @@ class OptimalTransportDA:
         ns = xs.shape[0]
         nt = xt.shape[0]
 
-        Bc = list(set(range(ns*nt))-set(B))
+        Bc = list(set(range(ns * nt)) - set(B))
 
         H = construct_H(ns, nt)
 
@@ -304,9 +325,9 @@ class OptimalTransportDA:
         final_interval = [-np.inf, np.inf]
 
         for i in range(p.shape[0]):
-            fa = - r[i][0]
-            sa = - q[i][0]
-            ta = - p[i][0]
+            fa = -r[i][0]
+            sa = -q[i][0]
+            ta = -p[i][0]
 
             temp = solve_quadratic_inequality(fa, sa, ta, z)
             final_interval = intersect(final_interval, temp)
