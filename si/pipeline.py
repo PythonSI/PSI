@@ -23,7 +23,7 @@ def line_search(output_node: Data, z_min: float, z_max: float, step_size: float 
         z = interval_of_z[1] + step_size
 
     for i in range(len(list_intervals) - 1):
-        assert list_intervals[i][1] >= list_intervals[i + 1][0], (
+        assert list_intervals[i][1] >= list_intervals[i + 1][0] + 1e-13, (
             "Intervals are overlapping in line search"
         )
 
