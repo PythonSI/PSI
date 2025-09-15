@@ -67,9 +67,7 @@ class LassoFeatureSelection:
         self.active_set_node.update(active_set)
         return active_set
 
-    def run(
-        self, x: npt.NDArray[np.floating], y: npt.NDArray[np.floating]
-    ) -> npt.NDArray[np.floating]:
+    def run(self, x: Data, y: Data) -> Data:
         r"""Configure LASSO with input data and return active set node.
 
         Parameters

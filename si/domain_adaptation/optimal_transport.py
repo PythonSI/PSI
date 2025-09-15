@@ -135,11 +135,11 @@ class OptimalTransportDA:
 
     def run(
         self,
-        xs: npt.NDArray[np.floating],
-        ys: npt.NDArray[np.floating],
-        xt: npt.NDArray[np.floating],
-        yt: npt.NDArray[np.floating],
-    ) -> npt.NDArray[np.floating]:
+        xs: Data,
+        ys: Data,
+        xt: Data,
+        yt: Data,
+    ) -> Data:
         r"""Configure domain adaptation with input data.
 
         Parameters

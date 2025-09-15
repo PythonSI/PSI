@@ -114,5 +114,4 @@ class Data:
 
         if self.a is not None and self.b is not None:
             self.inference_data = self.a + self.b * z
-            return self.inference_data, self.a, self.b, interval
         return self.inference_data, self.a, self.b, interval
