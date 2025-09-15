@@ -77,7 +77,7 @@ following rules before you submit a pull request:
    example script in the ``examples/`` folder. Have a look at other
    examples for reference. Examples should demonstrate why the new
    functionality is useful in practice and, if possible, compare it
-   to other methods available in POT.
+   to other methods available in PSI.
 
 You can also check for common programming errors with the following
 tools:
@@ -89,6 +89,8 @@ tools:
   ```
 
   This will run the pre-commit checks on all files in the repository.
+
+For technical detail visit [this](https://github.com/PythonSI/PSI/blob/main/.github/TECHNICAL_DETAILS.md)
 
 <!-- - All tests pass. You can run the following command to check:
 
