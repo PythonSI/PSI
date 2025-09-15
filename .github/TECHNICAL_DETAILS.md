@@ -2,17 +2,27 @@
 
 ## Module structure
 
-There are 3 main components in the module structure: Pipeline, Data and Method
+The module is organized around three main components: **Pipeline**, **Data**, and **Method**.
 
-- Pipeline is a graph with Datas and Methods as nodes and their relations as edges, which help managing the process of selective inference. The graph structure, or directed graph, reflects the sequential nature of the selective inference process: each step can only be executed once the preceding step has been completed → the graph is used to model this recursively.
+- **Pipeline**  
+  The pipeline is represented as a directed graph, where **Data** and **Method** are the nodes and their relationships form the edges.  
+  This graph structure captures the sequential nature of selective inference: each step depends on the successful completion of the previous step. The recursive design allows the process to be modeled and managed systematically.
 
-- Data is a node containing: Its observed data, a pointer to the parent Method node - indicating the node where the data in the current node is computed, and some parametrizing parameters (a, b) to help identify if a data is parametrized or not
+- **Data node**  
+  - Stores the observed data.  
+  - Contains a reference to its parent **Method node**, indicating the computation that produced it.  
+  - May include parameters *(a, b)* to determine whether the data is parameterized.  
 
-- Method is a node containing: Pointers to its parent Data nodes(Required data) and Pointers to its children nodes (Output) and some hyperparameter (example: lambda in Lasso, ...)
+- **Method node**  
+  - Represents a computation step.  
+  - Holds references to its parent **Data nodes** (the required inputs).  
+  - Holds references to its child nodes (the outputs it produces).  
+  - Includes relevant hyperparameters (e.g., λ in Lasso).  
 
 ## How the code work
 
-In this section, we will briefly explain how the structure and its components work together, also we will use SFS-DA as an example for better understanding
+In this section, we briefly describe how the structure and its components interact, using **SFS-DA** as an illustrative example for clarity.
+
 
 1. To start, we need to define a pipeline from the API:
 
@@ -36,9 +46,16 @@ def SFS_DA() -> Pipeline:
     )
 ```
 
-The `Data()` denote a new Data node, `OT = OptimalTransportDA()` create a new `OptimalTransportDA()` node, the following line denote the input note for the method, and create two new Data node as the method's output. The same is for the `LassoFeatureSelection`. In the last line, the inputs denote pointer of input nodes, and the output denote pointer of output node, and this is the data we are conditioning on while doing inference.
+- `Data()` creates a new **Data node**.  
+- `OT = OptimalTransportDA()` instantiates a new **Method node** of type `OptimalTransportDA`.  
+- The call `OT.run(xs=xs, ys=ys, xt=xt, yt=yt)` specifies the input Data nodes for the method and produces two new **Data nodes**: `x_tilde` and `y_tilde`.  
+- The same applies to `LassoFeatureSelection`, which takes `(x_tilde, y_tilde)` as inputs and generates the **Data node** `active_set`.  
+- In the final line, `Pipeline(...)` is constructed:  
+  - `inputs` are pointers to the input Data nodes `(xs, ys, xt, yt)`.  
+  - `output` is a pointer to the output Data node `active_set`.  
+  - This output is the data we condition on during inference. 
 
-2. After defining the pipeline and generating the data, we can run the pipeline and do selective inference on the result of the pipeline by calling the pipeline itself:
+2. After defining the pipeline and generating the data, we can execute it and perform selective inference on its result simply by calling the pipeline:
 
 ```{python}
 selected_features, p_values = my_pipeline(
@@ -76,10 +93,10 @@ selected_features, p_values = my_pipeline(
         return output, list_p_value
 ```
 
-this code do these jobs one after another:
+This code performs the following tasks sequentially:
 
-- Update the input data into the input nodes
-- Call `self.output_node()` to recursively compute the output using the data input in the previous step, method `__call__` of output_node (type of Data):
+- Updates the input data in the input nodes.  
+- Calls `self.output_node()` to recursively compute the output using the input data from the previous step. This relies on the `__call__` method of the output node (which is of type `Data`):
 
 ```{python}
     def __call__(self) -> npt.NDArray[np.floating]:
@@ -91,9 +108,9 @@ this code do these jobs one after another:
         return self.data
 ```
 
-this method call the parent node to compute its value and return the value or return the value if it is the input data nodes
+This method either calls the parent node to compute and return its value, or directly returns the stored value if the current node is an input data node.  
 
-- In this case, the current data node is `active_set`, so `self.parent` is `LassoFeatureSelection` node, which method `__call__`:
+- In this case, the current data node is `active_set`. Its parent (`self.parent`) is the `LassoFeatureSelection` node, whose `__call__` method is invoked. 
 
 ```{python}
     def __call__(self) -> npt.NDArray[np.floating]:
@@ -106,9 +123,9 @@ this method call the parent node to compute its value and return the value or re
         return active_set
 ```
 
-this method call the first two to achieve x, y as the inputs (which can be understanded as x and y after the OT-DA), these data can be computed recursively using the same way described as the `active_set`, active set is calculated by using the method `forward` which calculate the output data of the current method node which is `LassoFeatureSelection` in this case, and lastly, the `active_set` will be updated to the `active_set_node` throught its method `update`.
+This method first retrieves `x` and `y` as inputs (which can be interpreted as the transformed data after OT-DA). These inputs are obtained recursively in the same way as for `active_set`. Next, the `forward` method is used to compute the output of the current method node (`LassoFeatureSelection`), which produces the `active_set`. Finally, the `active_set` is updated in the corresponding `active_set_node` through its `update` method.  
 
-- For all output_id in output, in this case, for all feature in the `active_set`, we perform inference on this feature by using the method `inference` of Pipeline:
+- For each `output_id` in the output (in this case, for each feature in the `active_set`), the pipeline performs inference on that feature using its `inference` method.  
 
 ```{python}
     def inference(
@@ -134,9 +151,9 @@ this method call the first two to achieve x, y as the inputs (which can be under
         return p_value
 ```
 
-- Calculate the test statistic and other utilities for a choosen test, in this case we choose the test for feature selection after domain adaptation, this is calculated in the method `__call__` of `SFS_DATestStatistic`:
+- Compute the test statistic and related quantities for the chosen test. In this case, the test is for feature selection after domain adaptation, and it is implemented in the `__call__` method of `SFS_DATestStatistic`.
 
-````{python}
+```{python}
 class SFS_DATestStatistic:
     def __call__(
         self,
@@ -185,9 +202,10 @@ class SFS_DATestStatistic:
         self.xt_node.parametrize(data=xt)
         self.yt_node.parametrize(a=a[xs.shape[0] :, :], b=b[xs.shape[0] :, :])
         return test_statistic_direction, a, b, test_statistic, variance, deviation
-this method calculate the direction of the test statistics, the parametrized parameters ```a```, ```b```, the test statistic, variance deviation, and use the ```parametrize``` method of the Data class to update the the parametrized variable into ```ys_node``` and ```yt_node```
+```
+This method computes the test statistic direction, the parametrized parameters (`a`, `b`), the test statistic itself, and its variance and deviation. It then uses the `parametrize` method of the `Data` class to update the parametrized variables in both `ys_node` and `yt_node`.
 
-- After achieving the test statistic and other utilities, we will try to use the function ```line_search``` to search for intervals of ```z``` where the result on ```a + bz``` is equal to the observed ```active_set```:
+- After obtaining the test statistic and related quantities, the `line_search` function is used to find intervals of `z` where the expression `a + b z` matches the observed `active_set`.  
 ```{python}
 def line_search(output_node: Data, z_min: float, z_max: float, step_size: float = 1e-4):
     list_intervals = []
@@ -214,7 +232,7 @@ def line_search(output_node: Data, z_min: float, z_max: float, step_size: float 
     return list_intervals, list_outputs
 ````
 
-- In the function, the method `inference` of `output`, which is a Data node, is used:
+- Inside this function, the `inference` method of `output` (a `Data` node) is called.  
 ```{python}
 class Data:
     def inference(self, z: float):
@@ -227,23 +245,12 @@ class Data:
             self.inference_data = self.a + self.b * z
         return self.inference_data, self.a, self.b, interval
 ```
-this method calculate the feastible interval for the current ```z``` from the input node to this current node, and the data at the current ```z```
+This method computes the feasible interval for the current value of `z`, propagating from the input node up to the current node and also evaluates the data at that `z`.  
 
-- The method `inference` of ```self.parent```, which is a Method node, we will take a look at the ```LassoFeatureSelection```'s:
+- The `inference` method of `self.parent` (a `Method` node) is then called. For example, in this case we examine the `inference` method of `LassoFeatureSelection`.  
 ```{python}
 class LassoFeatureSelection:
     def inference(self, z: float) -> Tuple[list, npt.NDArray[np.floating]]:
-        r"""Find feasible interval of the Lasso Feature Selection for the parametrized data at z.
-
-        ----------
-        z : float
-            Inference parameter value
-
-        Returns
-        -------
-        final_interval : list
-            Feasible interval [lower, upper] for z
-        """
         if self.interval is not None and self.interval[0] <= z <= self.interval[1]:
             self.active_set_node.parametrize(data=self.active_set_data)
             return self.interval
@@ -304,8 +311,8 @@ class LassoFeatureSelection:
 
         return final_interval
 ```
-the first if statement, is used when a computation is repeated, we can briefly say, if the ```z``` input is inside the interval calculated previously, we can return the interval without calculating it again. The next step, is calculating the interval by solving a set of linear inequalities, we intersect this interval with its input node interval. Lastly, we update the data into its output node by using the method ```parametrize```, update our cached interval and output data and then return the final interval.
-- The same idea is applied to previous data nodes and the ```OTDomainAdaptation```.
+The first `if` statement handles repeated computations: if the input `z` lies within a previously calculated interval, the method simply returns that interval without recalculating. If not, the interval is computed by solving a system of linear inequalities, then intersected with the intervals from its input nodes. Finally, the output data is updated in its corresponding node using the `parametrize` method, the cached interval and output data are refreshed, and the final interval is returned.  
+- The same approach applies to earlier data nodes and to `OTDomainAdaptation`.  
 
 ## How to add a method
 
