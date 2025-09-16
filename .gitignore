@@ -14,3 +14,9 @@ docs/source/sg_execution_times.rst
 
 # local testing
 testing/
+
+# setuptools
+build/
+dist/
+*.egg-info/
+eggs/

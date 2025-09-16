@@ -6,6 +6,8 @@ from si.node import (
     Data,
 )
 
+__version__ = "0.1.0"
+
 __all__ = [
     "Pipeline",
     "feature_selection",
