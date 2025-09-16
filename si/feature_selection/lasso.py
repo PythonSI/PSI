@@ -135,6 +135,7 @@ class LassoFeatureSelection:
     def inference(self, z: float) -> Tuple[list, npt.NDArray[np.floating]]:
         r"""Find feasible interval of the Lasso Feature Selection for the parametrized data at z.
 
+        Parameters
         ----------
         z : float
             Inference parameter value
