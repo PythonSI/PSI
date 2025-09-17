@@ -1,25 +1,25 @@
-Contributing to PSI
+Contributing to PySelectInf
 ===================
 
-First off, thank you for taking the time to contribute to PSI!
+First off, thank you for taking the time to contribute to PySelectInf!
 
 How to contribute
 -----------------
 
-The recommended approach for contributing to PSI is to create a fork of the
-[main repository](https://github.com/PythonSI/PSI) on
+The recommended approach for contributing to PySelectInf is to create a fork of the
+[main repository](https://github.com/PythonSI/PySelectInf) on
 GitHub, clone it locally, and work on a feature branch. Here's how:
 
-1. Create a fork of the [project repository](https://github.com/PythonSI/PSI)
+1. Create a fork of the [project repository](https://github.com/PythonSI/PySelectInf)
    by clicking the 'Fork' button at the top right of the page. This will create
    a copy of the codebase under your GitHub account. For detailed instructions on
    forking a repository, see [this guide](https://help.github.com/articles/fork-a-repo/).
 
-2. Clone your forked PSI repository from your GitHub account to your local machine:
+2. Clone your forked PySelectInf repository from your GitHub account to your local machine:
 
    ```bash
-   $ git clone https://github.com/PythonSI/PSI.git
-   $ cd PSI
+   $ git clone https://github.com/PythonSI/PySelectInf.git
+   $ cd PySelectInf
    ```
 
 3. Install pre-commit hooks to ensure that your code is properly formatted:
@@ -77,7 +77,7 @@ following rules before you submit a pull request:
    example script in the ``examples/`` folder. Have a look at other
    examples for reference. Examples should demonstrate why the new
    functionality is useful in practice and, if possible, compare it
-   to other methods available in PSI.
+   to other methods available in PySelectInf.
 
 You can also check for common programming errors with the following
 tools:
@@ -90,7 +90,7 @@ tools:
 
   This will run the pre-commit checks on all files in the repository.
 
-For technical detail visit [this](https://github.com/PythonSI/PSI/blob/main/.github/TECHNICAL_DETAILS.md)
+For technical detail visit [this](https://github.com/PythonSI/PySelectInf/blob/main/.github/TECHNICAL_DETAILS.md)
 
 <!-- - All tests pass. You can run the following command to check:
 
