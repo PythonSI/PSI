@@ -1,6 +1,6 @@
 # PSI: Python Selective Inference
 
-[![PyPI version](https://badge.fury.io/py/PSI.svg)](https://badge.fury.io/py/PSI)
+[![PyPI version](https://badge.fury.io/py/PythonSI.svg)](https://badge.fury.io/py/PythonSI)
 [![License](https://anaconda.org/conda-forge/pot/badges/license.svg)](https://github.com/PythonSI/PSI/blob/master/LICENSE)
 
 This open source Python library provides APIs for selective inference for problems in machine learning such as feature selection, anomaly detection and domain adaptation.
@@ -20,6 +20,15 @@ PSI have provide selective inference support for methods:
     * Optimal Transport-based Domain Adaptation
 
 ## Installation
+
+The library has only been tested on Windows with Python 3.10. It requires some of the following modules:
+- numpy (=2.2.6)
+- mpmath (=1.3.0)
+- POT (==0.9.5)
+- scikit-learn( ==1.7.1)
+- scipy (==1.15.3)
+
+Note: Other versions of Python and dependencies shall be tested in the future.
 
 ### Pip Installation
 

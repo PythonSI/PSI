@@ -13,7 +13,7 @@ with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as f:
     README = f.read()
 
 setup(
-    name="PSI",
+    name="PythonSI",
     version=__version__,
     author="Tran Tuan Kiet, Nguyen Thang Loi, Duong Tan Loc, Vo Nguyen Le Duy, PSI Contributors",
     long_description=README,
@@ -22,7 +22,6 @@ setup(
     url="https://github.com/PythonSI/PSI",
     packages=find_packages(),
     install_requires=[
-        "matplotlib==3.10.6",
         "mpmath==1.3.0",
         "numpy==2.2.6",
         "POT==0.9.5",
