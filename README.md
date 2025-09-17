@@ -1,17 +1,17 @@
-# PSI: Python Selective Inference
+# PySelectInf: Python Selective Inference
 
-[![PyPI version](https://badge.fury.io/py/PythonSI.svg)](https://badge.fury.io/py/PythonSI)
-[![License](https://anaconda.org/conda-forge/pot/badges/license.svg)](https://github.com/PythonSI/PSI/blob/master/LICENSE)
+[![PyPI version](https://badge.fury.io/py/pyselectinf.svg)](https://badge.fury.io/py/pyselectinf)
+[![License](https://anaconda.org/conda-forge/pot/badges/license.svg)](https://github.com/PythonSI/PySelectInf/blob/master/LICENSE)
 
 This open source Python library provides APIs for selective inference for problems in machine learning such as feature selection, anomaly detection and domain adaptation.
 
 Website and documentation: [https://pythonsi.github.io/](https://pythonsi.github.io/)
 
-Source code (MIT): [https://github.com/PythonSI/PSI](https://github.com/PythonSI/PSI)
+Source code (MIT): [https://github.com/PythonSI/PySelectInf](https://github.com/PythonSI/PySelectInf)
 
 ## Implemented Features
 
-PSI have provide selective inference support for methods:
+PySelectInf have provide selective inference support for methods:
 
 * Feature Selection:
     * Lasso Feature Selection
@@ -35,17 +35,17 @@ Note: Other versions of Python and dependencies shall be tested in the future.
 You can install the toolbox through PyPI with:
 
 ```console
-pip install PSI
+pip install pyselectinf
 ```
 
 ### Post installation check
 After a correct installation, you should be able to import the module without errors:
 
 ```python
-import si
+import pythonsi
 ```
 
-Note that for easier access the module is named `si` instead of `psi`.
+Note that for easier access the module is named `pythonsi` instead of `pyselectinf`.
 
 ## Examples and Notebooks
 

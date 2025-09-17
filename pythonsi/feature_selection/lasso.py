@@ -1,9 +1,9 @@
 from sklearn.linear_model import Lasso
 import numpy as np
 import numpy.typing as npt
-from si.node import Data
+from pythonsi.node import Data
 from typing import Tuple
-from si.util import solve_linear_inequalities, intersect
+from pythonsi.util import solve_linear_inequalities, intersect
 
 
 class LassoFeatureSelection:

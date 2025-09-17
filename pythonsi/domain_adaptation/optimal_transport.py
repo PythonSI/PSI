@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.typing as npt
-from si.node import Data
+from pythonsi.node import Data
 from typing import Tuple
-from si.util import solve_quadratic_inequality, intersect
+from pythonsi.util import solve_quadratic_inequality, intersect
 from scipy.cluster.hierarchy import DisjointSet
 import ot
 

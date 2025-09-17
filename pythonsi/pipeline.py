@@ -1,7 +1,7 @@
-from si.node import Data
+from pythonsi.node import Data
 import numpy as np
 import numpy.typing as npt
-from si.util import compute_p_value
+from pythonsi.util import compute_p_value
 from typing import List
 
 

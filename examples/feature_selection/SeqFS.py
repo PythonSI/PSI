@@ -5,10 +5,10 @@ Selective inference for Sequential Feature Selection
 
 # Author: Duong Tan Loc
 
-from si import Pipeline
-from si.feature_selection import SequentialFeatureSelection
-from si import Data
-from si.test_statistics import FSTestStatistic
+from pythonsi import Pipeline
+from pythonsi.feature_selection import SequentialFeatureSelection
+from pythonsi import Data
+from pythonsi.test_statistics import FSTestStatistic
 import numpy as np
 import matplotlib.pyplot as plt
 

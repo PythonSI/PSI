@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.typing as npt
-from si.node import Data
+from pythonsi.node import Data
 from typing import Optional, Literal, Tuple
-from si.util import intersect, solve_quadratic_inequality
+from pythonsi.util import intersect, solve_quadratic_inequality
 import warnings
 
 

@@ -5,11 +5,11 @@ SI for Sequential Feature Selection after Optimal Transport-based Domain Adaptat
 
 # Author: Duong Tan Loc
 
-from si import Pipeline
-from si.feature_selection import SequentialFeatureSelection
-from si import Data
-from si.test_statistics import SFS_DATestStatistic
-from si.domain_adaptation import OptimalTransportDA
+from pythonsi import Pipeline
+from pythonsi.feature_selection import SequentialFeatureSelection
+from pythonsi import Data
+from pythonsi.test_statistics import SFS_DATestStatistic
+from pythonsi.domain_adaptation import OptimalTransportDA
 import numpy as np
 import matplotlib.pyplot as plt
 
