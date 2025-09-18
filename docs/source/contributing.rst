@@ -1,5 +1,5 @@
-Contributing to PSI
-===================
+Contributing to PythonSI
+=========================
 
 .. include:: ../../.github/CONTRIBUTING.md
     :parser: myst_parser.sphinx_

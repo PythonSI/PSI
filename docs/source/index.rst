@@ -1,5 +1,5 @@
-PSI: Python Selective Inference
-===================================
+PythonSI: Python Selective Inference
+====================================
 
 
 Contents

@@ -1,4 +1,4 @@
-# PySelectInf: Python Selective Inference
+# PythonSI: Python Selective Inference
 
 [![PyPI version](https://badge.fury.io/py/pyselectinf.svg)](https://badge.fury.io/py/pyselectinf)
 [![License](https://anaconda.org/conda-forge/pot/badges/license.svg)](https://github.com/PythonSI/PySelectInf/blob/master/LICENSE)
@@ -11,7 +11,7 @@ Source code (MIT): [https://github.com/PythonSI/PySelectInf](https://github.com/
 
 ## Implemented Features
 
-PySelectInf have provide selective inference support for methods:
+PythonSI have provide selective inference support for methods:
 
 * Feature Selection:
     * Lasso Feature Selection

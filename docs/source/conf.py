@@ -9,9 +9,9 @@
 import sys
 import os
 
-project = "PSI Python Selective Inference"
-copyright = "2025, PSI Contributors"
-author = "Tran Tuan Kiet, PSI Contributors"
+project = "PythonSI Python Selective Inference"
+copyright = "2025, PythonSI Contributors"
+author = "Tran Tuan Kiet, PythonSI Contributors"
 release = "First pre-release"
 
 sys.path.insert(0, os.path.abspath("."))
@@ -48,6 +48,8 @@ sphinx_gallery_conf = {
     "matplotlib_animations": True,
     "reference_url": {"ot": None},
     "copyfile_regex": r"index.rst",
+    "write_computation_times": False,
+    "min_reported_time": float("inf"),
 }
 
 napoleon_numpy_docstring = True

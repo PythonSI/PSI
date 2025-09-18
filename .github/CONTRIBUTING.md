@@ -1,7 +1,7 @@
-Contributing to PySelectInf
-===================
+Contributing to PythonSI
+========================
 
-First off, thank you for taking the time to contribute to PySelectInf!
+First off, thank you for taking the time to contribute to PythonSI!
 
 How to contribute
 -----------------
