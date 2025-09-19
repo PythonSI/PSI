@@ -2,7 +2,7 @@
 {{ underline }}
 
 .. automodule:: {{ fullname }}
-   :members:
+   :no-members:
 
    {% block functions %}
    {% if functions %}

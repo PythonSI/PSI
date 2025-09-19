@@ -5,10 +5,10 @@ Selective inference for TransFusion Feature Selection
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My
 
-from si import Pipeline
-from si.transfer_learning_hdr import PTLSITransFusion
-from si import Data
-from si.test_statistics import TLHDRTestStatistic
+from pythonsi import Pipeline
+from pythonsi.transfer_learning_hdr import TLTransFusion
+from pythonsi import Data
+from pythonsi.test_statistics import TLHDRTestStatistic
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -95,7 +95,7 @@ def PTL_SI_TL() -> Pipeline:
     SigmaS_list = Data()
     Sigma0 = Data()
 
-    transfusion = PTLSITransFusion(lambda_0, lambda_tilde, ak_weights)
+    transfusion = TLTransFusion(lambda_0, lambda_tilde, ak_weights)
     active_set = transfusion.run(XS_list, YS_list, X0, Y0)
     return Pipeline(
         inputs=(XS_list, YS_list, X0, Y0, SigmaS_list, Sigma0),

@@ -1,9 +1,9 @@
 from sklearn.linear_model import Lasso
 import numpy as np
 import numpy.typing as npt
-from si.node import Data
+from pythonsi.node import Data
 from typing import Tuple
-from si.util import solve_linear_inequalities, intersect
+from pythonsi.util import solve_linear_inequalities, intersect
 
 
 class LassoFeatureSelection:
@@ -135,6 +135,7 @@ class LassoFeatureSelection:
     def inference(self, z: float) -> Tuple[list, npt.NDArray[np.floating]]:
         r"""Find feasible interval of the Lasso Feature Selection for the parametrized data at z.
 
+        Parameters
         ----------
         z : float
             Inference parameter value

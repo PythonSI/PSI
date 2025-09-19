@@ -5,11 +5,11 @@ SI for Feature Selection after Optimal Transport-based Domain Adaptation
 
 # Author: Tran Tuan Kiet
 
-from si import Pipeline
-from si.feature_selection import LassoFeatureSelection
-from si import Data
-from si.test_statistics import SFS_DATestStatistic
-from si.domain_adaptation import OptimalTransportDA
+from pythonsi import Pipeline
+from pythonsi.feature_selection import LassoFeatureSelection
+from pythonsi import Data
+from pythonsi.test_statistics import SFS_DATestStatistic
+from pythonsi.domain_adaptation import OptimalTransportDA
 import numpy as np
 import matplotlib.pyplot as plt
 

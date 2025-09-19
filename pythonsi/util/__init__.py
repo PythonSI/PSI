@@ -1,4 +1,4 @@
-from si.util.util import (
+from pythonsi.util.util import (
     FormatArray,
     solve_linear_inequalities,
     solve_quadratic_inequality,

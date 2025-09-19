@@ -4,10 +4,10 @@
 API and modules
 ===============
 
-.. currentmodule:: si
+.. currentmodule:: pythonsi
 
 
-:py:mod:`si`:
+:py:mod:`pythonsi`:
 
 .. autosummary::
    :toctree: gen_modules/
@@ -19,9 +19,9 @@ API and modules
    test_statistics
 
 
-Main :py:mod:`si` functions
----------------------------
+Global :py:mod:`pythonsi` functions and classes:
+----------------------------------------------
 
-.. automodule:: si
+.. automodule:: pythonsi
    :members:
    

@@ -5,10 +5,10 @@ Selective inference for Oracle TransLasso Feature Selection
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My
 
-from si import Pipeline
-from si.transfer_learning_hdr import PTLSIOracleTransLasso
-from si import Data
-from si.test_statistics import TLHDRTestStatistic
+from pythonsi import Pipeline
+from pythonsi.transfer_learning_hdr import TLOracleTransLasso
+from pythonsi import Data
+from pythonsi.test_statistics import TLHDRTestStatistic
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -89,7 +89,7 @@ def PTL_SI_OTL() -> Pipeline:
     SigmaI_list = Data()
     Sigma0 = Data()
 
-    otl = PTLSIOracleTransLasso(lambda_w, lambda_del)
+    otl = TLOracleTransLasso(lambda_w, lambda_del)
     active_set = otl.run(XI_list, YI_list, X0, Y0)
     return Pipeline(
         inputs=(XI_list, YI_list, X0, Y0, SigmaI_list, Sigma0),
