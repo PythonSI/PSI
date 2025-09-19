@@ -8,6 +8,9 @@ This toolbox has been created by:
 It is currently maintained by:
 
 - [Tran Tuan Kiet](https://github.com/trtkiet)
+- [Nguyen Thang Loi](https://github.com/NT-Loi)
+- [Duong Tan Loc](https://github.com/locluclak)
+- [Vo Nguyen Le Duy](https://vonguyenleduy.github.io/)
 
 ## Contributors
 
