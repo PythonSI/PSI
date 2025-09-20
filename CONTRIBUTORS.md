@@ -3,7 +3,9 @@
 This toolbox has been created by:
 * [Tran Tuan Kiet](https://github.com/trtkiet)
 * [Nguyen Thang Loi](https://github.com/NT-Loi)
-* [Vo Nguyen Le Duy](https://vonguyenleduy.github.io/).
+* [Vo Nguyen Le Duy](https://vonguyenleduy.github.io/)
+* [Nguyen Vu Khai Tam](https://github.com/NgVuxKhaiTam)
+* [Cao Huyen My](https://github.com/22520896).
 
 It is currently maintained by:
 

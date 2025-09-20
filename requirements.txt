@@ -3,3 +3,4 @@ numpy==2.2.6
 POT==0.9.5
 scikit-learn==1.7.1
 scipy==1.15.3
+skglm==0.5
