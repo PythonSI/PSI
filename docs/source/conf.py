@@ -9,7 +9,8 @@
 import sys
 import os
 
-project = "PythonSI Python Selective Inference"
+
+project = "PythonSI: Python Selective Inference"
 copyright = "2025, PythonSI Contributors"
 author = "Tran Tuan Kiet, PythonSI Contributors"
 release = "First pre-release"
