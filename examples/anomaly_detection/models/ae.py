@@ -21,14 +21,14 @@ class AutoEncoder(nn.Module):
 
         for hidden_dim in encoder_hidden_dims:
             layers.append(nn.Linear(prev_dim, hidden_dim))
-            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.ReLU())
             prev_dim = hidden_dim
 
         prev_dim = encoder_hidden_dims[-1]
 
         for hidden_dim in decoder_hidden_dims:
             layers.append(nn.Linear(prev_dim, hidden_dim))
-            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.ReLU())
             prev_dim = hidden_dim
 
         layers.append(nn.Linear(prev_dim, input_dim))

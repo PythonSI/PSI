@@ -139,14 +139,13 @@ class WDGRL:
 
                     # Domain critic loss
                     dc_loss = -wasserstein_distance + self.gamma * gradient_penalty
-                    print(
-                        f"- iteration #{_} / {dc_iter} | source critic: {dc_source.mean().item()} | target critic: {dc_target.mean().item()} | wasserstein distance: {wasserstein_distance.item()} | gradient penalty: {gradient_penalty.item()}"
-                    )
+                    # print(
+                    #     f"- iteration #{_} / {dc_iter} | source critic: {dc_source.mean().item()} | target critic: {dc_target.mean().item()} | wasserstein distance: {wasserstein_distance.item()} | gradient penalty: {gradient_penalty.item()}"
+                    # )
                     dc_loss.backward()
                     self.critic_optimizer.step()
                     with torch.no_grad():
                         total_loss += wasserstein_distance.item()
-                print("-------------------------------")
                 # Train feature extractor
                 self.generator_optimizer.zero_grad()
                 source_features = self.generator(source_data)
