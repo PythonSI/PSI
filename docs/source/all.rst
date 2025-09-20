@@ -20,7 +20,7 @@ API and modules
 
 
 Global :py:mod:`pythonsi` functions and classes:
-----------------------------------------------
+------------------------------------------------
 
 .. automodule:: pythonsi
    :members:

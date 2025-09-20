@@ -22,12 +22,12 @@ PythonSI have provide selective inference support for methods:
 ## Installation
 
 The library has only been tested on Windows with Python 3.10. It requires some of the following modules:
-- numpy (=2.2.6)
-- mpmath (=1.3.0)
+- numpy (==2.2.6)
+- mpmath (==1.3.0)
 - POT (==0.9.5)
-- scikit-learn(==1.7.1)
+- scikit-learn (==1.7.1)
 - scipy (==1.15.3)
-- skglm(==0.5)
+- skglm (==0.5)
 
 
 Note: Other versions of Python and dependencies shall be tested in the future.
