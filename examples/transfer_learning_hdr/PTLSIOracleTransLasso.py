@@ -1,6 +1,9 @@
 r"""
 Selective inference for Oracle TransLasso Feature Selection
 ================================================
+This example demonstrates how to perform selective inference for the Oracle TransLasso feature selection algorithm, as proposed in [5]. Oracle TransLasso, introduced in [4], is a transfer learning algorithm designed for high-dimensional linear regression. It leverages multiple informative source domains to improve both feature selection and prediction in the target domain. This example builds on Oracle TransLasso by incorporating a post-selection inference framework to provide statistical guarantees for the selected features.
+[4] Li, S., Cai, T. T., & Li, H. (2022). Transfer learning for high-dimensional linear regression: Prediction, estimation and minimax optimality. Journal of the Royal Statistical Society Series B: Statistical Methodology, 84(1), 149-173.
+[5] Tam, N. V. K., My, C. H., & Duy, V. N. L. (2025). Post-Transfer Learning Statistical Inference in High-Dimensional Regression. arXiv preprint arXiv:2504.18212.
 """
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My

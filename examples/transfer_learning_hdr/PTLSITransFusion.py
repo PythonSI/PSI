@@ -1,7 +1,11 @@
 r"""
 Selective inference for TransFusion Feature Selection
 ================================================
+TransFusion in [6] is a robust transfer learning method designed to handle covariate shift between source and target domains. This example provides the post-selection inference for the TransFusion feature selection, using framework proposed in [5].
+[6] He, Z., Sun, Y., & Li, R. (2024, April). Transfusion: Covariate-shift robust transfer learning for high-dimensional regression. In International Conference on Artificial Intelligence and Statistics (pp. 703-711). PMLR.
+[5] Tam, N. V. K., My, C. H., & Duy, V. N. L. (2025). Post-Transfer Learning Statistical Inference in High-Dimensional Regression. arXiv preprint arXiv:2504.18212.
 """
+
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My
 
