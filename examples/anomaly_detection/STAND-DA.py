@@ -73,10 +73,12 @@ def STAND_DA() -> Pipeline:
     xs = Data()
     xt = Data()
 
-    rl_based_da = RepresentationLearningDA(model=feature_extractor, device="cuda")
+    rl_based_da = RepresentationLearningDA(
+        model=feature_extractor, device="cuda"
+    )  # or "cpu"
     x_tilde = rl_based_da.run(xs=xs, xt=xt)
 
-    autoencoder_ad = AutoEncoderAD(model=autoencoder, device="cuda")
+    autoencoder_ad = AutoEncoderAD(model=autoencoder, device="cuda")  # or "cpu"
     anomaly_indices = autoencoder_ad.run(x=x_tilde, target_data=xt)
 
     return Pipeline(
@@ -100,7 +102,7 @@ print("P-values: ", p_values)
 # %%
 # Plot the p-values
 plt.figure()
-plt.bar(range(len(p_values)), p_values)
+plt.bar(anomalies, p_values)
 plt.xlabel("Anomalies index")
 plt.ylabel("P-value")
 plt.show()
