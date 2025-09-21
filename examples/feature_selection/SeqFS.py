@@ -1,6 +1,8 @@
 r"""
 Selective inference for Sequential Feature Selection
 ====================================================
+This example demonstrates how to perform selective inference for Sequential Feature Selection using the `pythonsi` library. The method is based on the work by Tibshirani et al. (2016)[2].
+[2] Tibshirani, R. J., Taylor, J., Lockhart, R., & Tibshirani, R. (2016). Exact post-selection inference for sequential regression procedures. Journal of the American Statistical Association, 111(514), 600-620.
 """
 
 # Author: Duong Tan Loc
