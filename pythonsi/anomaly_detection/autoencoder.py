@@ -22,11 +22,11 @@ class AutoEncoderAD:
         self.alpha = alpha
         self.device = device
 
-    def run(self, x: Data, target_data: Optional[Data]) -> Data:
+    def run(self, x: Data, only_target_indices: Optional[Data] = None) -> Data:
         self.x_node = x
 
-        if target_data is not None:
-            self.xt_node = target_data
+        if only_target_indices is not None:
+            self.xt_node = only_target_indices
         return self.anomaly_node
 
     def forward(self, x: npt.NDArray) -> npt.NDArray:

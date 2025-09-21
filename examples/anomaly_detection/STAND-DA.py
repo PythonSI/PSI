@@ -16,7 +16,8 @@ from models.ae import AutoEncoder
 from typing import List
 import torch
 
-# %% Generate Data
+# %%
+# Generate Data
 # -----------------
 
 
@@ -48,6 +49,10 @@ ns, nt, d = 150, 25, 32
 
 xs, _, sigma_s = gen_data(0, [4], ns, d)
 xt, _, sigma_t = gen_data(2, [4], nt, d)
+plt.scatter(xs[:, 0], xs[:, 1], label="Source data")
+plt.scatter(xt[:, 0], xt[:, 1], label="Target data")
+plt.legend()
+plt.show()
 
 # %%
 # Load pretrained models
@@ -79,7 +84,7 @@ def STAND_DA() -> Pipeline:
     x_tilde = rl_based_da.run(xs=xs, xt=xt)
 
     autoencoder_ad = AutoEncoderAD(model=autoencoder, device="cuda")  # or "cpu"
-    anomaly_indices = autoencoder_ad.run(x=x_tilde, target_data=xt)
+    anomaly_indices = autoencoder_ad.run(x=x_tilde, only_target_indices=xt)
 
     return Pipeline(
         inputs=(xs, xt),
@@ -102,7 +107,7 @@ print("P-values: ", p_values)
 # %%
 # Plot the p-values
 plt.figure()
-plt.bar(anomalies, p_values)
+plt.bar([str(anomaly) for anomaly in anomalies], p_values)
 plt.xlabel("Anomalies index")
 plt.ylabel("P-value")
 plt.show()

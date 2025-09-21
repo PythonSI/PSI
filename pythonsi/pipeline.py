@@ -18,8 +18,8 @@ def line_search(output_node: Data, z_min: float, z_max: float, step_size: float 
         list_intervals.append(interval_of_z)
         list_outputs.append(output)
 
-        # For debug:
-        print(f"z: {z}, interval: {interval_of_z}, output: {output}")
+        # # For debug:
+        # print(f"z: {z}, interval: {interval_of_z}, output: {output}")
 
         z = interval_of_z[1] + step_size
 

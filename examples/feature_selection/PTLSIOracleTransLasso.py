@@ -1,6 +1,6 @@
 r"""
 Selective inference for Oracle TransLasso Feature Selection
-================================================
+===========================================================
 """
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My

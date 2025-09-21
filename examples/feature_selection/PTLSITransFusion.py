@@ -1,6 +1,6 @@
 r"""
 Selective inference for TransFusion Feature Selection
-================================================
+=====================================================
 """
 
 # Author: Nguyen Vu Khai Tam & Cao Huyen My

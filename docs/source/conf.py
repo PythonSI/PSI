@@ -43,6 +43,7 @@ sphinx_gallery_conf = {
     "examples_dirs": ["../../examples"],
     "gallery_dirs": "auto_examples",
     "filename_pattern": r"\.py",  # (?!barycenter_fgw)
+    "ignore_pattern": r"models",
     "nested_sections": False,
     "backreferences_dir": "gen_modules/backreferences",
     "inspect_global_variables": True,
