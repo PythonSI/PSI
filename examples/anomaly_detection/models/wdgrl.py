@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 from typing import List
 from torch.utils.data import DataLoader
-from tqdm import trange
 
 
 class Generator(nn.Module):
@@ -106,7 +105,7 @@ class WDGRL:
         losses = []
         source_critic_scores = []
         target_critic_scores = []
-        for epoch in trange(num_epochs, desc="Epoch"):
+        for epoch in num_epochs:
             loss = 0
             total_loss = 0
             for (source_data, _), (target_data, _) in zip(source_loader, target_loader):

@@ -84,7 +84,7 @@ def intersect(interval1, interval2):
 
     # Check feasibility
     if (lower is not None) and (upper is not None) and (lower > upper):
-        assert False, "Logic error in intersect_intervals"
+        assert False, f"Logic error in intersect_intervals: {lower} {upper}"
 
     return [lower, upper]
 

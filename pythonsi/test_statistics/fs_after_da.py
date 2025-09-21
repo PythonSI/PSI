@@ -67,7 +67,9 @@ class SFS_DATestStatistic:
         active_set: npt.NDArray[np.floating],
         feature_id: int,
         Sigmas: List[npt.NDArray[np.floating]],
-    ) -> Tuple[list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float]:
+    ) -> Tuple[
+        list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float, list
+    ]:
         r"""Compute test statistic for a selected feature after domain adaptation.
 
         Computes the test statistic and parametrization for testing whether
@@ -151,4 +153,12 @@ class SFS_DATestStatistic:
         self.ys_node.parametrize(a=a[: xs.shape[0], :], b=b[: xs.shape[0], :])
         self.xt_node.parametrize(data=xt)
         self.yt_node.parametrize(a=a[xs.shape[0] :, :], b=b[xs.shape[0] :, :])
-        return test_statistic_direction, a, b, test_statistic, variance, deviation
+        return (
+            test_statistic_direction,
+            a,
+            b,
+            test_statistic,
+            variance,
+            deviation,
+            [-np.inf, np.inf],
+        )

@@ -1,4 +1,3 @@
-import cupy as cp
 import torch
 from torch import nn
 
@@ -31,8 +30,8 @@ def parse_torch_model(model: nn.Module):
                 else None
             )
 
-            w = cp.asarray(w.cpu().T) if w is not None else None
-            b = cp.asarray(b.cpu()) if b is not None else None
+            w = w.T.to("cuda") if w is not None else None
+            b = b.to("cuda") if b is not None else None
 
             results.append((module.__class__.__name__, (w, b)))
             continue

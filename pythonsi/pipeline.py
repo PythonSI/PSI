@@ -18,8 +18,8 @@ def line_search(output_node: Data, z_min: float, z_max: float, step_size: float 
         list_intervals.append(interval_of_z)
         list_outputs.append(output)
 
-        # # For debug:
-        # print(f"z: {z}, interval: {interval_of_z}, output: {output}")
+        # For debug:
+        print(f"z: {z}, interval: {interval_of_z}, output: {output}")
 
         z = interval_of_z[1] + step_size
 
@@ -122,7 +122,7 @@ class Pipeline:
             Selective p-value for the data
         """
 
-        test_statistic_direction, a, b, test_statistic, variance, deviation = (
+        test_statistic_direction, a, b, test_statistic, variance, deviation, itv = (
             self.test_statistic(output, output_id, covariances)
         )
 
@@ -131,8 +131,8 @@ class Pipeline:
 
         list_intervals, list_outputs = line_search(
             self.output_node,
-            z_min=min(-20 * deviation, test_statistic),
-            z_max=max(20 * deviation, test_statistic),
+            z_min=min(max(-20 * deviation, itv[0]), test_statistic),
+            z_max=max(min(20 * deviation, itv[1]), test_statistic),
             step_size=1e-4,
         )
         p_value = compute_p_value(

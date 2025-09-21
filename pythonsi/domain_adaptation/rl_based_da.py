@@ -4,6 +4,7 @@ from pythonsi.node import Data
 from typing import Tuple
 from pythonsi.util import solve_quadratic_inequality, intersect
 from pythonsi.dnn import InferenceModel
+import torch
 
 
 class RepresentationLearningDA:
@@ -18,21 +19,19 @@ class RepresentationLearningDA:
 
         self.model = model.to(device)
         self.inference_model = InferenceModel(model, device)
+        self.device = device
 
     def run(self, xs: Data, xt: Data) -> Data:
         self.x_source_node = xs
         self.x_target_node = xt
 
-        self.x_output_node.add_input(self.x_source_node)
-        self.x_output_node.add_input(self.x_target_node)
+        return self.x_tilde_node
 
-        return self.x_output_node
-
-    def forward(
-        self, xs: npt.NDArray, xt: npt.NDArray
-    ) -> Tuple[npt.NDArray, npt.NDArray]:
+    def forward(self, xs: npt.NDArray, xt: npt.NDArray) -> npt.NDArray:
         x = np.vstack((xs, xt))
-        x_tilde = self.model(x)
+        x = x.astype(np.float32)  # Ensure proper dtype before tensor conversion
+        x = torch.tensor(x, dtype=torch.float32, device=self.device)
+        x_tilde = self.model(x).detach().cpu().numpy()
         return x_tilde
 
     def __call__(self):
@@ -40,7 +39,7 @@ class RepresentationLearningDA:
         xt = self.x_target_node()
 
         x_tilde = self.forward(xs, xt)
-        self.x_tilde_node.set_data(self.x_tilde_data)
+        self.x_tilde_node.update(x_tilde)
         return x_tilde
 
     def inference(self, z: float) -> Tuple[list, npt.NDArray]:
@@ -56,7 +55,7 @@ class RepresentationLearningDA:
 
         final_itv = [-np.inf, np.inf]
 
-        x_tilde = self.model(x)
+        x_tilde = self.forward(xs, xt)
         a_tilde, b_tilde, itv = self.inference_model.forward(a, b, z)
 
         final_itv = intersect(final_itv, itv)

@@ -6,37 +6,15 @@ Statistical Inference for Autoencoder-based Anomaly Detection after Representati
 # Author: Tran Tuan Kiet
 
 from pythonsi import Pipeline, Data
-from pythonsi.domain_adaptation import WDGRL
-from pythonsi.anomaly_detection import AE
-from pythonsi.test_statistics import AD_DA_TestStatistic
+from pythonsi.domain_adaptation import RepresentationLearningDA
+from pythonsi.anomaly_detection import AutoEncoderAD
+from pythonsi.test_statistics import AD_DATestStatistic
 import numpy as np
 import matplotlib.pyplot as plt
 from models.wdgrl import Generator
-from models.ae import Autoencoder
+from models.ae import AutoEncoder
 from typing import List
 import torch
-
-# %%
-# Define the pipeline
-# -------------------
-
-
-def STAND_DA(feature_extractor, autoencoder) -> Pipeline:
-    xs = Data()
-
-    xt = Data()
-
-    x_tilde = feature_extractor.run(xs=xs, xt=xt)
-
-    anomaly_indices = autoencoder.run(x_tilde)
-    return Pipeline(
-        inputs=(xs, xt),
-        output=anomaly_indices,
-        test_statistic=AD_DA_TestStatistic(xs=xs, xt=xt),
-    )
-
-
-my_pipeline = STAND_DA()
 
 # %% Generate Data
 # -----------------
@@ -76,20 +54,45 @@ xt, _, sigma_t = gen_data(2, [4], nt, d)
 # -------------------------
 
 feature_extractor = Generator(input_dim=d, hidden_dims=[500, 100])
-autoencoder = Autoencoder(
+autoencoder = AutoEncoder(
     input_dim=100, encoder_hidden_dims=[16, 8, 4, 2], decoder_hidden_dims=[2, 4, 8, 16]
 )
 
-feature_extractor.load_state_dict(torch.load("models/weights/feature_extractor.pth"))
-autoencoder.load_state_dict(torch.load("models/weights/autoencoder.pth"))
+feature_extractor.load_state_dict(torch.load("./models/weights/feature_extractor.pth"))
+autoencoder.load_state_dict(torch.load("./models/weights/autoencoder.pth"))
+
+feature_extractor = feature_extractor.to(torch.float32)
+autoencoder = autoencoder.to(torch.float32)
+
+# %%
+# Define the pipeline
+# -------------------
+
+
+def STAND_DA() -> Pipeline:
+    xs = Data()
+    xt = Data()
+
+    rl_based_da = RepresentationLearningDA(model=feature_extractor, device="cuda")
+    x_tilde = rl_based_da.run(xs=xs, xt=xt)
+
+    autoencoder_ad = AutoEncoderAD(model=autoencoder, device="cuda")
+    anomaly_indices = autoencoder_ad.run(x=x_tilde, target_data=xt)
+
+    return Pipeline(
+        inputs=(xs, xt),
+        output=anomaly_indices,
+        test_statistic=AD_DATestStatistic(xs=xs, xt=xt),
+    )
+
+
+my_pipeline = STAND_DA()
 
 # %%
 # Run the pipeline
 # -----------------
 
-anomalies, p_values = my_pipeline(
-    inputs=[xs, ys, xt, yt], covariances=[sigma_s, sigma_t]
-)
+anomalies, p_values = my_pipeline(inputs=[xs, xt], covariances=[sigma_s, sigma_t])
 
 print("Anomalies set: ", anomalies)
 print("P-values: ", p_values)
