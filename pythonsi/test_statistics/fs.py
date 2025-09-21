@@ -42,7 +42,9 @@ class FSTestStatistic:
         active_set: npt.NDArray[np.floating],
         feature_id: int,
         Sigma: npt.NDArray[np.floating],
-    ) -> Tuple[list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float]:
+    ) -> Tuple[
+        list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float, list
+    ]:
         r"""Compute test statistic for a selected feature.
 
         Computes the test statistic and parametrization for testing whether
@@ -107,4 +109,12 @@ class FSTestStatistic:
 
         self.x_node.parametrize(data=x)
         self.y_node.parametrize(a=a, b=b)
-        return test_statistic_direction, a, b, test_statistic, variance, deviation
+        return (
+            test_statistic_direction,
+            a,
+            b,
+            test_statistic,
+            variance,
+            deviation,
+            [-np.inf, np.inf],
+        )

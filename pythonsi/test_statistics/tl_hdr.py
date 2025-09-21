@@ -83,7 +83,9 @@ class TLHDRTestStatistic:
         active_set: npt.NDArray[np.int64],
         feature_id: int,
         Sigmas: List[npt.NDArray[np.floating]],
-    ) -> Tuple[list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float]:
+    ) -> Tuple[
+        list, npt.NDArray[np.floating], npt.NDArray[np.floating], float, float, list
+    ]:
         r"""Compute test statistic for a selected feature after transfer learning.
 
         Computes the test statistic and parametrization for testing
@@ -190,4 +192,12 @@ class TLHDRTestStatistic:
         self.X0_node.parametrize(data=X0)
         self.Y0_node.parametrize(a=a[n_sources:, :], b=b[n_sources:, :])
 
-        return test_statistic_direction, a, b, test_statistic, variance, deviation
+        return (
+            test_statistic_direction,
+            a,
+            b,
+            test_statistic,
+            variance,
+            deviation,
+            [-np.inf, np.inf],
+        )
