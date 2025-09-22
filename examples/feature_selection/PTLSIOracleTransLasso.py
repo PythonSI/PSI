@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 
 # %%
 # Generate data
+# -----------------
 def generate_coef(p, s, true_beta=0.25, num_info_aux=3, num_uninfo_aux=2, gamma=0.01):
     K = num_info_aux + num_uninfo_aux
     beta_0 = np.concatenate([np.full(s, true_beta), np.zeros(p - s)])
@@ -68,7 +69,9 @@ def generate_data(
     return XS_list, YS_list, X0, Y0, SigmaS_list, Sigma0
 
 
-# %% Define hyper-parameters
+# %%
+# Define hyper-parameters
+# -----------------------
 p = 100
 s = 10
 true_beta = 1
@@ -106,7 +109,9 @@ def PTL_SI_OTL() -> Pipeline:
 my_pipeline = PTL_SI_OTL()
 
 
-# %% Run the pipeline
+# %%
+# Run the pipeline
+# -----------------
 XI_list, YI_list, X0, Y0, SigmaI_list, Sigma0 = generate_data(
     p, s, nS, nT, true_beta, num_info_aux, num_uninfo_aux, gamma
 )
@@ -116,7 +121,9 @@ selected_features, p_values = my_pipeline(
 print("Selected features: ", selected_features)
 print("P-values: ", p_values)
 
-# %% Plot p-values
+# %%
+# Plot p-values
+# -----------------
 plt.figure()
 plt.bar(range(len(p_values)), p_values)
 plt.xlabel("Feature index")
