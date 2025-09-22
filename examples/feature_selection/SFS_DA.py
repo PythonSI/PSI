@@ -1,8 +1,9 @@
 r"""
 SI for Feature Selection after Optimal Transport-based Domain Adaptation
+========================================================================
+
 This example demonstrates how to perform statistical inference for feature selection after applying Optimal Transport-based Domain Adaptation. The implementation is based on the paper by Loi et al. (2025) [3].
 [3] Loi, N. T., Loc, D. T., & Duy, V. N. L. (2025). "Statistical Inference for Feature Selection after Optimal Transport-based Domain Adaptation." In International Conference on Artificial Intelligence and Statistics, pp. 1747-1755. PMLR, 2025.
-========================================================================
 """
 
 # Author: Tran Tuan Kiet
