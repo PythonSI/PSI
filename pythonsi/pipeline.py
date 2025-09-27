@@ -128,6 +128,8 @@ class Pipeline:
 
         # # For debug:
         # print(f"Test statistic: {test_statistic}")
+        # print(f"Variance: {variance}")
+        # print(f"Deviation: {deviation}")
 
         list_intervals, list_outputs = line_search(
             self.output_node,

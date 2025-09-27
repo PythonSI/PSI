@@ -1,6 +1,6 @@
 r"""
-SI for Sequential Feature Selection after Optimal Transport-based Domain Adaptation
-===================================================================================
+Selective Inference for Sequential Feature Selection after Optimal Transport-based Domain Adaptation
+=====================================================================================================
 This example demonstrates how to perform statistical inference for sequential feature selection (SeqFS) after applying Optimal Transport-based Domain Adaptation. The implementation follows the methodology proposed by Loc et al. (2025) [4].
 [4] Loc, D. T., Loi, N. T., & Duy, V. N. L. (2025). Statistical Inference for Sequential Feature Selection after Domain Adaptation. arXiv preprint arXiv:2501.09933.
 """

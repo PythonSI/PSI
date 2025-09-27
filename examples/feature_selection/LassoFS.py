@@ -1,7 +1,7 @@
 r"""
-Selective inference for Lasso Feature Selection
+Selective Inference for Lasso Feature Selection
 ================================================
-This example shows how to perform selective inference for Lasso feature selection using the `pythonsi` library. The method is based on the work by Duy et al. (2021)[1]. 
+This example shows how to perform selective inference for Lasso feature selection using the `pythonsi` library. The method is based on the work by Duy et al. (2021)[1].
 [1] Le Duy, V. N., & Takeuchi, I. (2021, March). Parametric programming approach for more powerful and general lasso selective inference. In International conference on artificial intelligence and statistics (pp. 901-909). PMLR.
 """
 
